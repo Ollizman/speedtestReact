@@ -1,14 +1,18 @@
-import React from 'react'
+import React from 'react';
 import './Box.css'
 
-function Box(props) {
-   
-    return(
-        <div className="box" onClick={props.click}>
-            
-        <h4>Active: {props.active} </h4>
+
+const Box = (props) => {
+    
+        return(
+        
+        <div className= {'box '+ props.color + (props.active === true ? " active" : '')} 
+        onClick = {props.click}
+       >
+
         </div>
-    )
+        )
+    
 }
 
 export default Box
