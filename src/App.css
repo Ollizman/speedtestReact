@@ -1,4 +1,17 @@
 .App {
   text-align: center;
 }
+.score {
+  font-size: 2.5em;
+  border-radius: 45%;
+  display: inline-block;
+}
+.green {
+  background-color: green;
+  width: 65px;
+}
+.red {
+  background-color: red;
+  width: 68px;
+}
 

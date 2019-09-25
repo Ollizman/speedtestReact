@@ -8,16 +8,17 @@ const activeQueue = [];
 class App extends Component {
   state = {
     score : 0,
+    scoreFlasher : 0,
     activeBox : undefined,
     pace : 1700,
     gameOver : false,
-    missclicks : 0
+    missclicks : 0,
   };
   
  // timer = undefined;
  // flashTimer = undefined;
   
-  flash = ( ) => {
+  flash = () => {
     activeQueue.push(this.state.activeBox);
     if (activeQueue.length >= 10) {
       this.stopGame();
@@ -56,25 +57,32 @@ console.log(this.state.pace);
     this.timer = setTimeout(this.next.bind(), this.state.pace);
   }
 
+  scoreFlash = () => {
+    this.setState({scoreFlasher : 0});
+  }
 
   clickHandler = () => {
-    
     console.log('painettu oikein');
+    this.setState({scoreFlasher : 1});
     this.setState({score: this.state.score + 1});
+    this.scoreFlashtimer = setTimeout(this.scoreFlash, 100);
     activeQueue.splice(0,1);
   }
   missclick = () => {
     //play voice
+    this.setState({scoreFlasher : 2});
     this.setState({score: this.state.score -1});
+    this.scoreFlashtimer = setTimeout(this.scoreFlash, 100);
     this.setState({missclicks: this.state.missclicks + 1});
-    if (this.state.missclicks > 3) {
+    if (this.state.missclicks >= 3) {
       this.stopGame();
     }
-    //en ymmärrä miksi stop game tulee vasta kun missclickejä on 5. vaikka määritelty lopuksi ja jos >3
+    //en ymmärrä miksi stop game tulee vasta kun missclickejä on 5. vaikka määritelty lopuksi ja jos >3.
+    //laitoin >=3 jolloin käytännössä pitää olla 4...:o
   }
 
+
   startGame = () => {
-    
     this.next();
 }
   stopGame = () => {
@@ -82,8 +90,6 @@ console.log(this.state.pace);
     clearTimeout(this.flash);
     this.setState({gameOver : true});
   }
-//timer = setTimeout(this.pelaa(), this.state.timer);
-
 
 
   render() {
@@ -109,8 +115,11 @@ console.log(this.state.pace);
             active={this.state.activeBox === 3}
             click= {activeQueue[0] === 3 ? this.clickHandler : this.missclick}/>
 
-
-        <p>{this.state.score}</p>
+      <p>
+        <div className= {this.state.scoreFlasher === 1 ? 'score green' 
+        : this.state.scoreFlasher === 2 
+        ? 'score red' : 'score'}>{this.state.score}</div>
+      </p>
 
         <div>
           <button onClick={this.startGame}>Start!</button>
